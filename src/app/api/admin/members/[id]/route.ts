@@ -121,7 +121,7 @@ export async function PUT(
         duan,
         documentType: documentType || null,
         documentNumber: documentNumber || null,
-        documentExpiry: documentExpiry ? new Date(documentExpiry) : null,
+        documentExpiry: documentExpiry ? new Date(documentExpiry) : new Date(),
         hasMedicalCert: medicalCertS3Key ? true : false,
         medicalCertS3Key: medicalCertS3Key || null,
         annualPayment: annualPayment || false,
