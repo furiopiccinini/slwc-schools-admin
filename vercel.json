@@ -4,7 +4,7 @@
   "framework": "nextjs",
   "installCommand": "npm install",
   "functions": {
-    "api/**/*.ts": {
+    "src/app/api/**/*.ts": {
       "maxDuration": 30
     }
   }
