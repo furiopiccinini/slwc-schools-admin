@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Configurazione per l'app Next.js nella sottodirectory /admin
+# Questa configurazione va nella cartella /admin del tuo sito
+
+# Gestisce le richieste per l'app Next.js
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /admin/server.js [QSA,L]
+
+# Configurazione per i file statici di Next.js
+RewriteRule ^_next/static/(.*)$ /admin/_next/static/$1 [L]
+RewriteRule ^favicon.ico /admin/favicon.ico [L]

@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model School {
+  id           Int      @id @default(autoincrement())
+  name         String
+  gymName      String?  @map("gym_name")
+  slug         String   @unique
+  address      String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  instructors Instructor[]
+  subscribers Subscriber[]
+
+  @@map("wp_schools")
+}
+
+model Instructor {
+  id           Int      @id @default(autoincrement())
+  schoolId     Int      @map("school_id")
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         Role     @default(INSTRUCTOR)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@map("wp_instructors")
+}
+
+model Subscriber {
+  id              Int      @id @default(autoincrement())
+  schoolId        Int      @map("school_id")
+  qrCode          String?  @unique @map("qr_code")
+  
+  // Dati personali obbligatori
+  firstName       String   @map("first_name")
+  lastName        String   @map("last_name")
+  birthDate       DateTime @map("birth_date")
+  birthPlace      String   @map("birth_place")
+  birthCap        String   @map("birth_cap")
+  fiscalCode      String   @map("fiscal_code")
+  residence       String
+  residenceCity   String   @map("residence_city")
+  residenceCap    String   @map("residence_cap")
+  email           String
+  phone           String
+  
+  // Dati Wing Chun
+  duan            Int      // 0-9 + 9 tecnici (0-18 totali)
+  
+  // Documenti (obbligatori)
+  documentType    String   @map("document_type") // Carta identità, Passaporto, Patente
+  documentNumber  String   @map("document_number")
+  documentExpiry  DateTime @map("document_expiry")
+  
+  // Certificato medico (opzionale)
+  hasMedicalCert  Boolean  @default(false) @map("has_medical_cert")
+  medicalCertS3Key String? @map("medical_cert_s3_key")
+  
+  // Iscrizione SLWC
+  slwcJoinDate    DateTime @default(now()) @map("slwc_join_date")
+  
+  // Pagamenti e tessera
+  annualPayment   Boolean  @default(false) @map("annual_payment")
+  isEpsMember     Boolean  @default(false) @map("is_eps_member")
+  epsCardNumber   String?  @map("eps_card_number")
+  epsJoinDate     DateTime? @map("eps_join_date")
+  
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  school                School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  medicalCertificates   MedicalCertificate[]
+
+  @@map("wp_subscribers")
+}
+
+model MedicalCertificate {
+  id         Int      @id @default(autoincrement())
+  subscriberId   Int      @map("subscriber_id")
+  s3Key      String   @map("s3_key")
+  fileName   String   @map("file_name")
+  uploadDate DateTime @default(now()) @map("upload_date")
+  expiryDate DateTime @map("expiry_date")
+
+  // Relations
+  subscriber Subscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+
+  @@map("wp_medical_certificates")
+}
+
+enum Role {
+  ADMIN
+  INSTRUCTOR
+}
