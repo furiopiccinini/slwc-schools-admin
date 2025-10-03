@@ -36,17 +36,7 @@ async function main() {
     
     console.log(`✅ Aggiornati ${updatedDocumentNumber.count} record con documentNumber NULL`);
     
-    // Aggiorna i record con documentExpiry NULL
-    const updatedDocumentExpiry = await prisma.subscriber.updateMany({
-      where: {
-        documentExpiry: null
-      },
-      data: {
-        documentExpiry: new Date() // Data corrente come default
-      }
-    });
-    
-    console.log(`✅ Aggiornati ${updatedDocumentExpiry.count} record con documentExpiry NULL`);
+    console.log('✅ documentExpiry non può essere NULL nel database');
     
     console.log('🎉 Correzione completata!');
     
