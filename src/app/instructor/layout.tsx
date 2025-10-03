@@ -73,7 +73,7 @@ export default function InstructorLayout({
                   href="/instructor/members"
                   className={getNavLinkClasses("/instructor/members")}
                 >
-                  I Miei Membri
+                  Iscritti
                 </Link>
               </div>
             </div>
