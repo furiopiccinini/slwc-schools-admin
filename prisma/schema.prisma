@@ -65,8 +65,8 @@ model Subscriber {
   duan            Int      // 0-9 + 9 tecnici (0-18 totali)
   
   // Documenti (obbligatori)
-  documentType    String   @map("document_type") // Carta identità, Passaporto, Patente
-  documentNumber  String   @map("document_number")
+  documentType    String?  @map("document_type") // Carta identità, Passaporto, Patente
+  documentNumber  String?  @map("document_number")
   documentExpiry  DateTime @map("document_expiry")
   
   // Certificato medico (opzionale)
