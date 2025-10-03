@@ -3,11 +3,11 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session || !session.user || (session.user as any).role !== "INSTRUCTOR") {
+    if (!session || !session.user || (session.user as { role?: string }).role !== "INSTRUCTOR") {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 })
     }
 

@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
-import Link from "next/link"
 import { Button } from "@/components/ui/FormElements"
 
 interface Subscriber {
@@ -36,11 +34,10 @@ interface Subscriber {
 }
 
 export default function InstructorMembersPage() {
-  const { data: session } = useSession()
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [itemsPerPage] = useState(10)
 
   useEffect(() => {
     fetchSubscribers()
