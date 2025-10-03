@@ -43,16 +43,39 @@ async function createAdmin() {
     
     const hashedPassword = await bcrypt.hash(password, 12)
     
-    // 3. Creazione utente admin
+    // 3. Chiedi i dati dell'admin
+    const adminEmail = await new Promise((resolve) => {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      })
+      rl.question('Inserisci l\'email dell\'admin: ', (answer) => {
+        rl.close()
+        resolve(answer)
+      })
+    })
+    
+    const adminName = await new Promise((resolve) => {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      })
+      rl.question('Inserisci il nome dell\'admin: ', (answer) => {
+        rl.close()
+        resolve(answer)
+      })
+    })
+    
+    // 4. Creazione utente admin
     let admin = await prisma.instructor.findUnique({
-      where: { email: 'furiopiccinini@gmail.com' }
+      where: { email: adminEmail }
     })
     
     if (!admin) {
       admin = await prisma.instructor.create({
         data: {
-          name: 'Furio Piccinini',
-          email: 'furiopiccinini@gmail.com',
+          name: adminName,
+          email: adminEmail,
           passwordHash: hashedPassword,
           role: 'ADMIN',
           schoolId: school.id
@@ -63,34 +86,78 @@ async function createAdmin() {
       console.log('⚠️  Admin già esistente')
     }
     
-    // 4. Creazione istruttore di test
-    let instructor = await prisma.instructor.findUnique({
-      where: { email: 'mario.rossi@wingchun-roma.it' }
+    // 4. Chiedi se creare un istruttore di test
+    const createInstructor = await new Promise((resolve) => {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      })
+      rl.question('Vuoi creare un istruttore di test? (y/n): ', (answer) => {
+        rl.close()
+        resolve(answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes')
+      })
     })
     
-    if (!instructor) {
-      const instructorPassword = await bcrypt.hash('instructor123', 12)
-      instructor = await prisma.instructor.create({
-        data: {
-          name: 'Mario Rossi',
-          email: 'mario.rossi@wingchun-roma.it',
-          passwordHash: instructorPassword,
-          role: 'INSTRUCTOR',
-          schoolId: school.id
-        }
+    if (createInstructor) {
+      const instructorEmail = await new Promise((resolve) => {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        })
+        rl.question('Inserisci l\'email dell\'istruttore: ', (answer) => {
+          rl.close()
+          resolve(answer)
+        })
       })
-      console.log('✅ Istruttore di test creato')
-    } else {
-      console.log('⚠️  Istruttore già esistente')
+      
+      const instructorName = await new Promise((resolve) => {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        })
+        rl.question('Inserisci il nome dell\'istruttore: ', (answer) => {
+          rl.close()
+          resolve(answer)
+        })
+      })
+      
+      const instructorPassword = await new Promise((resolve) => {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        })
+        rl.question('Inserisci la password per l\'istruttore: ', (answer) => {
+          rl.close()
+          resolve(answer)
+        })
+      })
+      
+      let instructor = await prisma.instructor.findUnique({
+        where: { email: instructorEmail }
+      })
+      
+      if (!instructor) {
+        const hashedInstructorPassword = await bcrypt.hash(instructorPassword, 12)
+        instructor = await prisma.instructor.create({
+          data: {
+            name: instructorName,
+            email: instructorEmail,
+            passwordHash: hashedInstructorPassword,
+            role: 'INSTRUCTOR',
+            schoolId: school.id
+          }
+        })
+        console.log('✅ Istruttore creato!')
+      } else {
+        console.log('⚠️  Istruttore già esistente')
+      }
     }
     
-    console.log('\n🎉 DATI DI TEST CREATI:')
-    console.log('👑 Admin:')
-    console.log('   📧 Email: furiopiccinini@gmail.com')
-    console.log('   🔑 Password: slwcadmin2026!')
-    console.log('👨‍🏫 Istruttore:')
-    console.log('   📧 Email: mario.rossi@wingchun-roma.it')
-    console.log('   🔑 Password: instructor123')
+    console.log('\n🎉 SETUP COMPLETATO!')
+    console.log('👑 Admin creato con successo!')
+    if (createInstructor) {
+      console.log('👨‍🏫 Istruttore creato con successo!')
+    }
     
   } catch (error) {
     console.error('❌ Errore:', error.message)
