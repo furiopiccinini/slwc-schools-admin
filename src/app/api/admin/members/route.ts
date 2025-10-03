@@ -123,7 +123,7 @@ export async function POST(_request: NextRequest) {
         duan: parseInt(duan),
         documentType: documentType || null,
         documentNumber: documentNumber || null,
-        documentExpiry: documentExpiry ? new Date(documentExpiry) : null,
+        documentExpiry: documentExpiry ? new Date(documentExpiry) : new Date(),
         hasMedicalCert: hasMedicalCert || false,
         medicalCertS3Key: medicalCertS3Key || null,
         annualPayment: annualPayment || false,
