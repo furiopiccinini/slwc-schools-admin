@@ -27,7 +27,21 @@ async function createAdmin() {
     }
     
     // 2. Hash della password
-    const hashedPassword = await bcrypt.hash('slwcadmin2026!', 12)
+    // Chiedi la password all'utente
+    const readline = require('readline')
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    })
+    
+    const password = await new Promise((resolve) => {
+      rl.question('Inserisci la password per l\'admin: ', (answer) => {
+        rl.close()
+        resolve(answer)
+      })
+    })
+    
+    const hashedPassword = await bcrypt.hash(password, 12)
     
     // 3. Creazione utente admin
     let admin = await prisma.instructor.findUnique({
