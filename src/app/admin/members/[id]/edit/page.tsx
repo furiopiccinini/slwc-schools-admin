@@ -106,6 +106,7 @@ export default function EditSubscriberPage() {
         setValue("email", data.email)
         setValue("phone", data.phone)
         setValue("duan", data.duan)
+        console.log("DocumentType from API:", data.documentType)
         setValue("documentType", data.documentType || "")
         setValue("documentNumber", data.documentNumber || "")
         setValue("documentExpiry", data.documentExpiry ? data.documentExpiry.split('T')[0] : "")
