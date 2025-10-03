@@ -107,7 +107,26 @@ export default function EditSubscriberPage() {
         setValue("phone", data.phone)
         setValue("duan", data.duan)
         console.log("DocumentType from API:", data.documentType)
-        setValue("documentType", data.documentType || "")
+        
+        // Converti il tipo documento dal database al codice del frontend
+        let documentTypeCode = ""
+        if (data.documentType) {
+          switch (data.documentType) {
+            case "Carta Identità":
+              documentTypeCode = "CI"
+              break
+            case "Passaporto":
+              documentTypeCode = "PP"
+              break
+            case "Patente":
+              documentTypeCode = "PT"
+              break
+            default:
+              documentTypeCode = data.documentType // Mantieni il valore originale se non riconosciuto
+          }
+        }
+        
+        setValue("documentType", documentTypeCode)
         setValue("documentNumber", data.documentNumber || "")
         setValue("documentExpiry", data.documentExpiry ? data.documentExpiry.split('T')[0] : "")
         setValue("annualPayment", data.annualPayment)
@@ -237,6 +256,24 @@ export default function EditSubscriberPage() {
         }
       }
 
+      // Converti il codice del frontend al valore del database
+      let documentTypeValue = data.documentType
+      if (data.documentType) {
+        switch (data.documentType) {
+          case "CI":
+            documentTypeValue = "Carta Identità"
+            break
+          case "PP":
+            documentTypeValue = "Passaporto"
+            break
+          case "PT":
+            documentTypeValue = "Patente"
+            break
+          default:
+            documentTypeValue = data.documentType // Mantieni il valore originale
+        }
+      }
+      
       const response = await fetch(`/api/admin/members/${subscriberId}`, {
         method: 'PUT',
         headers: {
@@ -244,6 +281,7 @@ export default function EditSubscriberPage() {
         },
         body: JSON.stringify({
           ...data,
+          documentType: documentTypeValue,
           birthDate: new Date(data.birthDate).toISOString(),
           documentExpiry: new Date(data.documentExpiry).toISOString(),
           epsJoinDate: data.epsJoinDate ? new Date(data.epsJoinDate).toISOString() : null,
