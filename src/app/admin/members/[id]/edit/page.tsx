@@ -50,8 +50,8 @@ interface Subscriber {
   email: string
   phone: string
   duan: number
-  documentType: string
-  documentNumber: string
+  documentType?: string
+  documentNumber?: string
   documentExpiry: string
   medicalCertS3Key?: string
   annualPayment: boolean
