@@ -541,27 +541,6 @@ export default function PublicRegistrationPage() {
                 </div>
               </div>
 
-              {/* Disclaimer e Condizioni */}
-              <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mt-6">
-                <div className="text-sm text-blue-800">
-                  <h4 className="font-semibold mb-2">Condizioni di Iscrizione</h4>
-                  <p className="mb-3">
-                    Avendo preso visione dello statuto, l&apos;iscritto chiede di poter aderire all&apos;associazione in qualità di socio ordinario. A tale scopo, dichiara di condividere gli obiettivi espressi nello statuto e di voler contribuire alla loro realizzazione. Il sottoscritto inoltre:
-                  </p>
-                  <ul className="list-disc list-inside space-y-1 mb-3 text-xs">
-                    <li>si impegna nell&apos;osservanza delle norme statutarie e delle disposizioni del consiglio direttivo;</li>
-                    <li>prende atto che l&apos;adesione è subordinata all&apos;accettazione della domanda da parte dell&apos;organo statutario;</li>
-                    <li>dichiara che in caso di accettazione verserà la quota associativa annuale secondo le modalità stabilite dal consiglio direttivo;</li>
-                    <li>in quanto socio avrà diritto a essere iscritto nel libro dei soci e a partecipare alle attività associative e alle assemblee, a eleggere le cariche sociali e a essere eletto;</li>
-                    <li>è informato sulle coperture assicurative previste al rilascio della tessera;</li>
-                    <li>la conferma di questo modulo digitale equivale alla raccolta della firma ad accettazione delle condizioni specificate.</li>
-                  </ul>
-                  <p className="text-xs font-medium">
-                    Nim Lik ASD, Località Castagnola 8 - 27052 Rocca Susella (PV) - PI: 02918480183
-                  </p>
-                </div>
-              </div>
-
               {/* Submit Button */}
               <div className="pt-6 border-t border-gray-200">
                 <button
