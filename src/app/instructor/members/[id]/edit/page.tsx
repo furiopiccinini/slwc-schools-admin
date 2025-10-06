@@ -6,6 +6,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Button } from "@/components/ui/FormElements"
+import { Input } from "@/components/ui/Input"
+import { Select } from "@/components/ui/Select"
+import { Checkbox } from "@/components/ui/Checkbox"
 
 const editSubscriberSchema = z.object({
   firstName: z.string().min(1, "Nome obbligatorio"),
@@ -237,6 +240,18 @@ export default function EditSubscriberPage() {
     )
   }
 
+  const documentTypeOptions = [
+    { value: "", label: "Seleziona tipo" },
+    { value: "CI", label: "Carta Identità" },
+    { value: "PP", label: "Passaporto" },
+    { value: "PT", label: "Patente" }
+  ]
+
+  const schoolOptions = schools.map(school => ({
+    value: school.id.toString(),
+    label: school.name
+  }))
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
@@ -256,125 +271,89 @@ export default function EditSubscriberPage() {
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                Nome *
-              </label>
-              <input
+              <Input
                 {...register("firstName")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Nome"
+                error={errors.firstName?.message}
+                required
               />
-              {errors.firstName && (
-                <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                Cognome *
-              </label>
-              <input
+              <Input
                 {...register("lastName")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Cognome"
+                error={errors.lastName?.message}
+                required
               />
-              {errors.lastName && (
-                <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
-                Data di Nascita *
-              </label>
-              <input
+              <Input
                 type="date"
                 {...register("birthDate")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Data di Nascita"
+                error={errors.birthDate?.message}
+                required
               />
-              {errors.birthDate && (
-                <p className="mt-1 text-sm text-red-600">{errors.birthDate.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="birthPlace" className="block text-sm font-medium text-gray-700">
-                Luogo di Nascita *
-              </label>
-              <input
+              <Input
                 {...register("birthPlace")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Luogo di Nascita"
+                error={errors.birthPlace?.message}
+                required
               />
-              {errors.birthPlace && (
-                <p className="mt-1 text-sm text-red-600">{errors.birthPlace.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="birthCap" className="block text-sm font-medium text-gray-700">
-                CAP di Nascita *
-              </label>
-              <input
+              <Input
                 {...register("birthCap")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="CAP di Nascita"
+                error={errors.birthCap?.message}
+                required
               />
-              {errors.birthCap && (
-                <p className="mt-1 text-sm text-red-600">{errors.birthCap.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="fiscalCode" className="block text-sm font-medium text-gray-700">
-                Codice Fiscale *
-              </label>
-              <input
+              <Input
                 {...register("fiscalCode")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Codice Fiscale"
+                error={errors.fiscalCode?.message}
+                required
               />
-              {errors.fiscalCode && (
-                <p className="mt-1 text-sm text-red-600">{errors.fiscalCode.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email *
-              </label>
-              <input
+              <Input
                 type="email"
                 {...register("email")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Email"
+                error={errors.email?.message}
+                required
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                Telefono *
-              </label>
-              <input
+              <Input
                 {...register("phone")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Telefono"
+                error={errors.phone?.message}
+                required
               />
-              {errors.phone && (
-                <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="duan" className="block text-sm font-medium text-gray-700">
-                Duan *
-              </label>
-              <input
+              <Input
                 type="number"
                 min="0"
                 max="18"
                 {...register("duan", { valueAsNumber: true })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Duan"
+                error={errors.duan?.message}
+                required
               />
-              {errors.duan && (
-                <p className="mt-1 text-sm text-red-600">{errors.duan.message}</p>
-              )}
             </div>
 
             {/* Residenza */}
@@ -383,42 +362,30 @@ export default function EditSubscriberPage() {
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="residence" className="block text-sm font-medium text-gray-700">
-                Indirizzo *
-              </label>
-              <input
+              <Input
                 {...register("residence")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Indirizzo"
+                error={errors.residence?.message}
+                required
               />
-              {errors.residence && (
-                <p className="mt-1 text-sm text-red-600">{errors.residence.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="residenceCity" className="block text-sm font-medium text-gray-700">
-                Città *
-              </label>
-              <input
+              <Input
                 {...register("residenceCity")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Città"
+                error={errors.residenceCity?.message}
+                required
               />
-              {errors.residenceCity && (
-                <p className="mt-1 text-sm text-red-600">{errors.residenceCity.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-1">
-              <label htmlFor="residenceCap" className="block text-sm font-medium text-gray-700">
-                CAP *
-              </label>
-              <input
+              <Input
                 {...register("residenceCap")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="CAP"
+                error={errors.residenceCap?.message}
+                required
               />
-              {errors.residenceCap && (
-                <p className="mt-1 text-sm text-red-600">{errors.residenceCap.message}</p>
-              )}
             </div>
 
             {/* Documenti */}
@@ -427,48 +394,32 @@ export default function EditSubscriberPage() {
             </div>
 
             <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="documentType" className="block text-sm font-medium text-gray-700">
-                Tipo Documento *
-              </label>
-              <select
+              <Select
                 {...register("documentType")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              >
-                <option value="">Seleziona tipo</option>
-                <option value="CI">Carta Identità</option>
-                <option value="PP">Passaporto</option>
-                <option value="PT">Patente</option>
-              </select>
-              {errors.documentType && (
-                <p className="mt-1 text-sm text-red-600">{errors.documentType.message}</p>
-              )}
-            </div>
-
-            <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="documentNumber" className="block text-sm font-medium text-gray-700">
-                Numero Documento *
-              </label>
-              <input
-                {...register("documentNumber")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Tipo Documento"
+                error={errors.documentType?.message}
+                options={documentTypeOptions}
+                required
               />
-              {errors.documentNumber && (
-                <p className="mt-1 text-sm text-red-600">{errors.documentNumber.message}</p>
-              )}
             </div>
 
             <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="documentExpiry" className="block text-sm font-medium text-gray-700">
-                Scadenza Documento *
-              </label>
-              <input
+              <Input
+                {...register("documentNumber")}
+                label="Numero Documento"
+                error={errors.documentNumber?.message}
+                required
+              />
+            </div>
+
+            <div className="col-span-6 sm:col-span-2">
+              <Input
                 type="date"
                 {...register("documentExpiry")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Scadenza Documento"
+                error={errors.documentExpiry?.message}
+                required
               />
-              {errors.documentExpiry && (
-                <p className="mt-1 text-sm text-red-600">{errors.documentExpiry.message}</p>
-              )}
             </div>
 
             {/* Pagamenti e EPS */}
@@ -477,49 +428,33 @@ export default function EditSubscriberPage() {
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  {...register("annualPayment")}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                />
-                <label className="ml-2 block text-sm text-gray-900">
-                  Pagamento Annuale Effettuato
-                </label>
-              </div>
-            </div>
-
-            <div className="col-span-6 sm:col-span-3">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  {...register("isEpsMember")}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                />
-                <label className="ml-2 block text-sm text-gray-900">
-                  Membro EPS
-                </label>
-              </div>
-            </div>
-
-            <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="epsCardNumber" className="block text-sm font-medium text-gray-700">
-                Numero Tessera EPS
-              </label>
-              <input
-                {...register("epsCardNumber")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              <Checkbox
+                {...register("annualPayment")}
+                label="Pagamento Annuale Effettuato"
               />
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="epsJoinDate" className="block text-sm font-medium text-gray-700">
-                Data Iscrizione EPS
-              </label>
-              <input
+              <Checkbox
+                {...register("isEpsMember")}
+                label="Membro EPS"
+              />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <Input
+                {...register("epsCardNumber")}
+                label="Numero Tessera EPS"
+                helperText="Opzionale"
+              />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <Input
                 type="date"
                 {...register("epsJoinDate")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                label="Data Iscrizione EPS"
+                helperText="Opzionale"
               />
             </div>
 
@@ -529,23 +464,13 @@ export default function EditSubscriberPage() {
             </div>
 
             <div className="col-span-6 sm:col-span-3">
-              <label htmlFor="schoolId" className="block text-sm font-medium text-gray-700">
-                Scuola *
-              </label>
-              <select
+              <Select
                 {...register("schoolId")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              >
-                <option value="">Seleziona scuola</option>
-                {schools.map((school) => (
-                  <option key={school.id} value={school.id}>
-                    {school.name}
-                  </option>
-                ))}
-              </select>
-              {errors.schoolId && (
-                <p className="mt-1 text-sm text-red-600">{errors.schoolId.message}</p>
-              )}
+                label="Scuola"
+                error={errors.schoolId?.message}
+                options={schoolOptions}
+                required
+              />
             </div>
           </div>
         </div>
