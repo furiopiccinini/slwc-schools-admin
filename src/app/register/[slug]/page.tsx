@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import Image from "next/image"
+import { Input } from "@/components/ui/Input"
+import { Select } from "@/components/ui/Select"
 
 const registrationSchema = z.object({
   firstName: z.string().min(2, "Nome deve essere di almeno 2 caratteri"),
@@ -248,61 +250,35 @@ export default function PublicRegistrationPage() {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Informazioni Personali</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                      Nome *
-                    </label>
-                    <input
-                      {...register("firstName")}
-                      type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.firstName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("firstName")}
+                    label="Nome"
+                    error={errors.firstName?.message}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                      Cognome *
-                    </label>
-                    <input
-                      {...register("lastName")}
-                      type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.lastName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("lastName")}
+                    label="Cognome"
+                    error={errors.lastName?.message}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                      Email *
-                    </label>
-                    <input
-                      {...register("email")}
-                      type="email"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("email")}
+                    type="email"
+                    label="Email"
+                    error={errors.email?.message}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                      Cellulare *
-                    </label>
-                    <input
-                      {...register("phone")}
-                      type="tel"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.phone && (
-                      <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("phone")}
+                    type="tel"
+                    label="Cellulare"
+                    error={errors.phone?.message}
+                    required
+                  />
                 </div>
               </div>
 
@@ -310,48 +286,28 @@ export default function PublicRegistrationPage() {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Data e Luogo di Nascita</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <div>
-                    <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
-                      Data di Nascita *
-                    </label>
-                    <input
-                      {...register("birthDate")}
-                      type="date"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.birthDate && (
-                      <p className="mt-1 text-sm text-red-600">{errors.birthDate.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("birthDate")}
+                    type="date"
+                    label="Data di Nascita"
+                    error={errors.birthDate?.message}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="birthPlace" className="block text-sm font-medium text-gray-700">
-                      Luogo di Nascita *
-                    </label>
-                    <input
-                      {...register("birthPlace")}
-                      type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.birthPlace && (
-                      <p className="mt-1 text-sm text-red-600">{errors.birthPlace.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("birthPlace")}
+                    label="Luogo di Nascita"
+                    error={errors.birthPlace?.message}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="birthCap" className="block text-sm font-medium text-gray-700">
-                      CAP di Nascita *
-                    </label>
-                    <input
-                      {...register("birthCap")}
-                      type="text"
-                      maxLength={5}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.birthCap && (
-                      <p className="mt-1 text-sm text-red-600">{errors.birthCap.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("birthCap")}
+                    label="CAP di Nascita"
+                    maxLength={5}
+                    error={errors.birthCap?.message}
+                    required
+                  />
                 </div>
               </div>
 
@@ -359,49 +315,28 @@ export default function PublicRegistrationPage() {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Residenza</h3>
                 <div className="grid grid-cols-1 gap-4">
-                  <div>
-                    <label htmlFor="residence" className="block text-sm font-medium text-gray-700">
-                      Indirizzo *
-                    </label>
-                    <input
-                      {...register("residence")}
-                      type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.residence && (
-                      <p className="mt-1 text-sm text-red-600">{errors.residence.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("residence")}
+                    label="Indirizzo"
+                    error={errors.residence?.message}
+                    required
+                  />
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="residenceCity" className="block text-sm font-medium text-gray-700">
-                        Comune *
-                      </label>
-                      <input
-                        {...register("residenceCity")}
-                        type="text"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                      {errors.residenceCity && (
-                        <p className="mt-1 text-sm text-red-600">{errors.residenceCity.message}</p>
-                      )}
-                    </div>
+                    <Input
+                      {...register("residenceCity")}
+                      label="Comune"
+                      error={errors.residenceCity?.message}
+                      required
+                    />
 
-                    <div>
-                      <label htmlFor="residenceCap" className="block text-sm font-medium text-gray-700">
-                        CAP *
-                      </label>
-                      <input
-                        {...register("residenceCap")}
-                        type="text"
-                        maxLength={5}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                      {errors.residenceCap && (
-                        <p className="mt-1 text-sm text-red-600">{errors.residenceCap.message}</p>
-                      )}
-                    </div>
+                    <Input
+                      {...register("residenceCap")}
+                      label="CAP"
+                      maxLength={5}
+                      error={errors.residenceCap?.message}
+                      required
+                    />
                   </div>
                 </div>
               </div>
@@ -410,54 +345,43 @@ export default function PublicRegistrationPage() {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Informazioni Wing Chun</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="fiscalCode" className="block text-sm font-medium text-gray-700">
-                      Codice Fiscale *
-                    </label>
-                    <input
-                      {...register("fiscalCode")}
-                      type="text"
-                      maxLength={16}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm uppercase"
-                    />
-                    {errors.fiscalCode && (
-                      <p className="mt-1 text-sm text-red-600">{errors.fiscalCode.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("fiscalCode")}
+                    label="Codice Fiscale"
+                    maxLength={16}
+                    className="uppercase"
+                    error={errors.fiscalCode?.message}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="duan" className="block text-sm font-medium text-gray-700">
-                      Duan Wing Chun *
-                    </label>
-                    <select
-                      {...register("duan")}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    >
-                      <option value="">Seleziona duan</option>
-                      <option value="0">0° Duan (Principiante)</option>
-                      <option value="1">1° Duan</option>
-                      <option value="2">2° Duan</option>
-                      <option value="3">3° Duan</option>
-                      <option value="4">4° Duan</option>
-                      <option value="5">5° Duan</option>
-                      <option value="6">6° Duan</option>
-                      <option value="7">7° Duan</option>
-                      <option value="8">8° Duan</option>
-                      <option value="9">9° Duan</option>
-                      <option value="10">1° Duan Tecnico</option>
-                      <option value="11">2° Duan Tecnico</option>
-                      <option value="12">3° Duan Tecnico</option>
-                      <option value="13">4° Duan Tecnico</option>
-                      <option value="14">5° Duan Tecnico</option>
-                      <option value="15">6° Duan Tecnico</option>
-                      <option value="16">7° Duan Tecnico</option>
-                      <option value="17">8° Duan Tecnico</option>
-                      <option value="18">9° Duan Tecnico</option>
-                    </select>
-                    {errors.duan && (
-                      <p className="mt-1 text-sm text-red-600">{errors.duan.message}</p>
-                    )}
-                  </div>
+                  <Select
+                    {...register("duan")}
+                    label="Duan Wing Chun"
+                    error={errors.duan?.message}
+                    options={[
+                      { value: "", label: "Seleziona duan" },
+                      { value: "0", label: "0° Duan (Principiante)" },
+                      { value: "1", label: "1° Duan" },
+                      { value: "2", label: "2° Duan" },
+                      { value: "3", label: "3° Duan" },
+                      { value: "4", label: "4° Duan" },
+                      { value: "5", label: "5° Duan" },
+                      { value: "6", label: "6° Duan" },
+                      { value: "7", label: "7° Duan" },
+                      { value: "8", label: "8° Duan" },
+                      { value: "9", label: "9° Duan" },
+                      { value: "10", label: "1° Duan Tecnico" },
+                      { value: "11", label: "2° Duan Tecnico" },
+                      { value: "12", label: "3° Duan Tecnico" },
+                      { value: "13", label: "4° Duan Tecnico" },
+                      { value: "14", label: "5° Duan Tecnico" },
+                      { value: "15", label: "6° Duan Tecnico" },
+                      { value: "16", label: "7° Duan Tecnico" },
+                      { value: "17", label: "8° Duan Tecnico" },
+                      { value: "18", label: "9° Duan Tecnico" }
+                    ]}
+                    required
+                  />
                 </div>
               </div>
 
@@ -465,52 +389,34 @@ export default function PublicRegistrationPage() {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Documento di Identità (Obbligatorio)</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <div>
-                    <label htmlFor="documentType" className="block text-sm font-medium text-gray-700">
-                      Tipo Documento *
-                    </label>
-                    <select
-                      {...register("documentType")}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    >
-                      <option value="">Seleziona tipo</option>
-                      <option value="Carta Identità">Carta Identità</option>
-                      <option value="Passaporto">Passaporto</option>
-                      <option value="Patente">Patente</option>
-                    </select>
-                    {errors.documentType && (
-                      <p className="mt-1 text-sm text-red-600">{errors.documentType.message}</p>
-                    )}
-                  </div>
+                  <Select
+                    {...register("documentType")}
+                    label="Tipo Documento"
+                    error={errors.documentType?.message}
+                    options={[
+                      { value: "", label: "Seleziona tipo" },
+                      { value: "Carta Identità", label: "Carta Identità" },
+                      { value: "Passaporto", label: "Passaporto" },
+                      { value: "Patente", label: "Patente" }
+                    ]}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="documentNumber" className="block text-sm font-medium text-gray-700">
-                      Numero Documento *
-                    </label>
-                    <input
-                      {...register("documentNumber")}
-                      type="text"
-                      placeholder="Es. AA1234567"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.documentNumber && (
-                      <p className="mt-1 text-sm text-red-600">{errors.documentNumber.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("documentNumber")}
+                    label="Numero Documento"
+                    placeholder="Es. AA1234567"
+                    error={errors.documentNumber?.message}
+                    required
+                  />
 
-                  <div>
-                    <label htmlFor="documentExpiry" className="block text-sm font-medium text-gray-700">
-                      Scadenza Documento *
-                    </label>
-                    <input
-                      {...register("documentExpiry")}
-                      type="date"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    {errors.documentExpiry && (
-                      <p className="mt-1 text-sm text-red-600">{errors.documentExpiry.message}</p>
-                    )}
-                  </div>
+                  <Input
+                    {...register("documentExpiry")}
+                    type="date"
+                    label="Scadenza Documento"
+                    error={errors.documentExpiry?.message}
+                    required
+                  />
                 </div>
               </div>
 

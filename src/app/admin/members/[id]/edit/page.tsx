@@ -5,6 +5,9 @@ import { useRouter, useParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import { Input } from "@/components/ui/Input"
+import { Select } from "@/components/ui/Select"
+import { Checkbox } from "@/components/ui/Checkbox"
 
 const editSubscriberSchema = z.object({
   firstName: z.string().min(1, "Nome richiesto"),
