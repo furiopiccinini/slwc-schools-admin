@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/FormElements"
 
 interface Subscriber {
@@ -149,6 +150,9 @@ export default function InstructorMembersPage() {
                     <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
                       Membro EPS
                     </th>
+                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
+                      Azioni
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -235,6 +239,14 @@ export default function InstructorMembersPage() {
                             No
                           </span>
                         )}
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">
+                        <Link
+                          href={`/instructor/members/${subscriber.id}/edit`}
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Modifica
+                        </Link>
                       </td>
                     </tr>
                   ))}
