@@ -226,7 +226,7 @@ export default function EditSubscriberPage() {
     return (
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900">Iscritto non trovato</h1>
-        <p className="mt-2 text-gray-600">L'iscritto che stai cercando non esiste.</p>
+        <p className="mt-2 text-gray-600">L&apos;iscritto che stai cercando non esiste.</p>
         <Button
           onClick={() => router.push("/instructor/members")}
           className="mt-4"
@@ -242,7 +242,7 @@ export default function EditSubscriberPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Modifica Iscritto</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Modifica i dati dell'iscritto {subscriber.firstName} {subscriber.lastName}
+          Modifica i dati dell&apos;iscritto {subscriber.firstName} {subscriber.lastName}
         </p>
       </div>
 
