@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -14,7 +14,8 @@ export async function GET(
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 })
     }
 
-    const subscriberId = parseInt(params.id)
+    const { id } = await params
+    const subscriberId = parseInt(id)
     if (isNaN(subscriberId)) {
       return NextResponse.json({ error: "ID non valido" }, { status: 400 })
     }
@@ -60,7 +61,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -69,7 +70,8 @@ export async function PUT(
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 })
     }
 
-    const subscriberId = parseInt(params.id)
+    const { id } = await params
+    const subscriberId = parseInt(id)
     if (isNaN(subscriberId)) {
       return NextResponse.json({ error: "ID non valido" }, { status: 400 })
     }
