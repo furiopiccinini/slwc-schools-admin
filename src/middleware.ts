@@ -20,7 +20,7 @@ export default withAuth(
         }
         
         // Public routes
-        if (pathname.startsWith("/iscrizione") || pathname.startsWith("/auth")) {
+        if (pathname.startsWith("/register") || pathname.startsWith("/auth")) {
           return true
         }
         
@@ -31,5 +31,5 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ["/admin/:path*", "/instructor/:path*", "/iscrizione/:path*"]
+  matcher: ["/admin/:path*", "/instructor/:path*", "/register/:path*"]
 }

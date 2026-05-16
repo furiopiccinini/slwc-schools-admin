@@ -175,7 +175,7 @@ export default function EditSchoolPage() {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                     <p className="mt-1 text-xs text-gray-500">
-                      Usato per l&apos;URL del form di iscrizione: /iscrizione/[slug]
+                      Usato per l&apos;URL del form di iscrizione: /register/[slug]
                     </p>
                     {errors.slug && (
                       <p className="mt-1 text-sm text-red-600">{errors.slug.message}</p>

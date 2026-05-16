@@ -59,3 +59,4 @@ WHERE email ILIKE '%EMAIL_DA_CERCARE%'
 
 ORDER BY tabella, created_at;
 
+

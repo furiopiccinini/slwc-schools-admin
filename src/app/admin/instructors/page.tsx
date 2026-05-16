@@ -163,13 +163,11 @@ export default function InstructorsPage() {
                       </td>
                       <td className="px-6 py-2 whitespace-nowrap text-sm font-medium">
                         <div className="flex flex-col space-y-1 items-start">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {/* TODO: Implement edit */}}
-                          >
-                            Modifica
-                          </Button>
+                          <Link href={`/admin/instructors/${instructor.id}/edit`}>
+                            <Button variant="ghost" size="sm">
+                              Modifica
+                            </Button>
+                          </Link>
                           <Button
                             variant="danger"
                             size="sm"
