@@ -106,6 +106,13 @@ model MedicalCertificate {
   @@map("wp_medical_certificates")
 }
 
+model DbKeepalive {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("db_keepalive")
+}
+
 enum Role {
   ADMIN
   INSTRUCTOR
