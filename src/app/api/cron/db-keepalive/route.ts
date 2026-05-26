@@ -4,14 +4,30 @@ import { prisma } from "@/lib/prisma"
 const ROME_TIMEZONE = "Europe/Rome"
 const KEEPALIVE_DELAY_MS = 3000
 
-function getRomeHour(): number {
-  const hour = new Intl.DateTimeFormat("en-GB", {
+/** Orari target: 07:00, 13:00, 21:30 Europe/Rome */
+const SLOTS = ["07:00", "13:00", "21:30"] as const
+
+type RomeTime = { hour: number; minute: number }
+
+function getRomeTime(): RomeTime {
+  const parts = new Intl.DateTimeFormat("en-GB", {
     timeZone: ROME_TIMEZONE,
     hour: "numeric",
+    minute: "numeric",
     hour12: false,
-  }).format(new Date())
+  }).formatToParts(new Date())
 
-  return Number.parseInt(hour, 10)
+  return {
+    hour: Number(parts.find((p) => p.type === "hour")?.value ?? -1),
+    minute: Number(parts.find((p) => p.type === "minute")?.value ?? -1),
+  }
+}
+
+function getActiveSlot({ hour, minute }: RomeTime): (typeof SLOTS)[number] | null {
+  if (hour === 7 && minute < 10) return "07:00"
+  if (hour === 13 && minute < 10) return "13:00"
+  if (hour === 21 && minute >= 28 && minute <= 39) return "21:30"
+  return null
 }
 
 function isAuthorized(request: NextRequest): boolean {
@@ -27,13 +43,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const romeHour = getRomeHour()
-  if (romeHour !== 2) {
+  const romeTime = getRomeTime()
+  const slot = getActiveSlot(romeTime)
+
+  if (!slot) {
     return NextResponse.json({
       ok: true,
       skipped: true,
-      reason: "Outside 02:00 Europe/Rome window",
-      romeHour,
+      reason: `Outside scheduled windows (${SLOTS.join(", ")} Europe/Rome)`,
+      romeTime,
     })
   }
 
@@ -46,6 +64,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       ok: true,
+      slot,
       pingId: ping.id,
       deletedAfterMs: KEEPALIVE_DELAY_MS,
     })
