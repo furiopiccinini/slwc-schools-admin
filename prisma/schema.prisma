@@ -2,27 +2,30 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model School {
-  id           Int      @id @default(autoincrement())
-  name         String
-  gymName      String?  @map("gym_name")
-  slug         String   @unique
-  address      String?
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id                Int      @id @default(autoincrement())
+  name              String
+  gymName           String?  @map("gym_name")
+  slug              String   @unique
+  address           String?
+  defaultMonthlyFee Decimal  @default(50.00) @map("default_monthly_fee") @db.Decimal(10, 2)
+  paymentsEnabled   Boolean  @default(false) @map("payments_enabled")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
   // Relations
-  instructors Instructor[]
-  subscribers Subscriber[]
+  instructors          Instructor[]
+  subscribers          Subscriber[]
+  monthlyPaymentEntries MonthlyPaymentEntry[]
 
   @@map("wp_schools")
 }
@@ -88,8 +91,29 @@ model Subscriber {
   // Relations
   school                School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   medicalCertificates   MedicalCertificate[]
+  monthlyPaymentEntries MonthlyPaymentEntry[]
 
   @@map("wp_subscribers")
+}
+
+model MonthlyPaymentEntry {
+  id             Int       @id @default(autoincrement())
+  schoolId       Int       @map("school_id")
+  subscriberId   Int       @map("subscriber_id")
+  year           Int
+  month          Int // 1-12
+  expectedAmount Decimal   @map("expected_amount") @db.Decimal(10, 2)
+  paidAmount     Decimal?  @map("paid_amount") @db.Decimal(10, 2)
+  paidAt         DateTime? @map("paid_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  school     School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subscriber Subscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriberId, year, month])
+  @@index([schoolId, year, month])
+  @@map("wp_monthly_payment_entries")
 }
 
 model MedicalCertificate {
@@ -104,13 +128,6 @@ model MedicalCertificate {
   subscriber Subscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
 
   @@map("wp_medical_certificates")
-}
-
-model DbKeepalive {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("db_keepalive")
 }
 
 enum Role {

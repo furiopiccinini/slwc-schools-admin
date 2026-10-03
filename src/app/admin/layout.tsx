@@ -88,6 +88,12 @@ export default function AdminLayout({
                 >
                   Iscritti
                 </Link>
+                <Link
+                  href="/admin/payments"
+                  className={getNavLinkClasses("/admin/payments")}
+                >
+                  Pagamenti
+                </Link>
               </div>
             </div>
             <div className="flex items-center">
@@ -169,6 +175,17 @@ export default function AdminLayout({
               >
                 Iscritti
               </Link>
+              <Link
+                href="/admin/payments"
+                className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                  pathname.startsWith("/admin/payments")
+                    ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
+                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Pagamenti
+              </Link>
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="flex items-center px-4">
@@ -199,7 +216,7 @@ export default function AdminLayout({
           </div>
         )}
       </nav>
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {children}
       </main>
     </div>

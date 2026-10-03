@@ -76,6 +76,12 @@ export default function InstructorLayout({
                 >
                   Iscritti
                 </Link>
+                <Link
+                  href="/instructor/payments"
+                  className={getNavLinkClasses("/instructor/payments")}
+                >
+                  Pagamenti
+                </Link>
               </div>
             </div>
             <div className="flex items-center">
@@ -135,6 +141,17 @@ export default function InstructorLayout({
               >
                 Iscritti
               </Link>
+              <Link
+                href="/instructor/payments"
+                className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                  pathname.startsWith("/instructor/payments")
+                    ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
+                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Pagamenti
+              </Link>
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="flex items-center px-4">
@@ -165,7 +182,7 @@ export default function InstructorLayout({
           </div>
         )}
       </nav>
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {children}
       </main>
     </div>
