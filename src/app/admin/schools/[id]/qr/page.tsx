@@ -5,6 +5,7 @@ import { useParams } from "next/navigation"
 import QRCode from "qrcode"
 import Link from "next/link"
 import Image from "next/image"
+import { getSchoolRegistrationUrl } from "@/lib/public-url"
 
 interface School {
   id: number
@@ -16,60 +17,69 @@ interface School {
 export default function SchoolQRPage() {
   const params = useParams()
   const [school, setSchool] = useState<School | null>(null)
-  const [qrCodeDataURL, setQrCodeDataURL] = useState<string>("")
+  const [registrationURL, setRegistrationURL] = useState("")
+  const [qrCodeDataURL, setQrCodeDataURL] = useState("")
   const [loading, setLoading] = useState(true)
   const [qrLoading, setQrLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const fetchSchool = useCallback(async () => {
     try {
-      const response = await fetch(`/api/admin/schools/${params.id}`)
-      if (response.ok) {
-        const data = await response.json()
-        setSchool(data)
+      const response = await fetch(`/api/admin/schools/${params.id}`, {
+        credentials: "include",
+      })
+      if (!response.ok) {
+        setError("Scuola non trovata")
+        return
       }
-    } catch (error) {
-      console.error("Errore nel caricamento scuola:", error)
+      const data = await response.json()
+      setSchool(data)
+      setRegistrationURL(getSchoolRegistrationUrl(data.slug))
+    } catch (err) {
+      console.error("Errore nel caricamento scuola:", err)
+      setError("Errore nel caricamento scuola")
     } finally {
       setLoading(false)
     }
   }, [params.id])
 
-  useEffect(() => {
-    if (params.id) {
-      fetchSchool()
-    }
-  }, [params.id, fetchSchool])
-
-  const generateQRCode = async () => {
-    if (!school) return
-
+  const generateQRCode = useCallback(async (url: string) => {
     setQrLoading(true)
+    setError("")
     try {
-      // URL per la pagina di iscrizione pubblica
-      const registrationURL = `${window.location.origin}/register/${school.slug}`
-      
-      // Genera il QR Code
-      const qrDataURL = await QRCode.toDataURL(registrationURL, {
-        width: 300,
+      const qrDataURL = await QRCode.toDataURL(url, {
+        width: 512,
         margin: 2,
         color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
       })
-      
       setQrCodeDataURL(qrDataURL)
-    } catch (error) {
-      console.error("Errore nella generazione QR Code:", error)
+    } catch (err) {
+      console.error("Errore nella generazione QR Code:", err)
+      setError("Impossibile generare il QR Code")
     } finally {
       setQrLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    if (params.id) {
+      void fetchSchool()
+    }
+  }, [params.id, fetchSchool])
+
+  useEffect(() => {
+    if (registrationURL) {
+      void generateQRCode(registrationURL)
+    }
+  }, [registrationURL, generateQRCode])
 
   const downloadQRCode = () => {
     if (!qrCodeDataURL || !school) return
 
-    const link = document.createElement('a')
+    const link = document.createElement("a")
     link.download = `qr-code-${school.slug}.png`
     link.href = qrCodeDataURL
     document.body.appendChild(link)
@@ -79,8 +89,8 @@ export default function SchoolQRPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      <div className="flex h-64 items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-indigo-600" />
       </div>
     )
   }
@@ -89,7 +99,7 @@ export default function SchoolQRPage() {
     return (
       <div className="px-4 py-6 sm:px-0">
         <div className="text-center">
-          <p className="text-red-600">Scuola non trovata</p>
+          <p className="text-red-600">{error || "Scuola non trovata"}</p>
           <Link href="/admin/schools" className="text-indigo-600 hover:text-indigo-900">
             Torna alle scuole
           </Link>
@@ -100,105 +110,101 @@ export default function SchoolQRPage() {
 
   return (
     <div className="px-4 py-6 sm:px-0">
-      <div className="max-w-2xl mx-auto">
+      <div className="mx-auto max-w-2xl">
         <div className="mb-6">
-          <Link 
-            href="/admin/schools" 
-            className="text-indigo-600 hover:text-indigo-900 mb-4 inline-block"
+          <Link
+            href="/admin/schools"
+            className="mb-4 inline-block text-indigo-600 hover:text-indigo-900"
           >
             ← Torna alle scuole
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-slate-900">
             QR Code per {school.name}
           </h1>
-          <p className="mt-2 text-gray-600">
-            Genera un QR Code per permettere ai nuovi iscritti di registrarsi a questa scuola
+          <p className="mt-2 text-slate-600">
+            Gli iscritti scansionano questo codice e aprono il form di registrazione
           </p>
         </div>
 
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Informazioni Scuola
-            </h2>
-            <div className="grid grid-cols-1 gap-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="mb-6 space-y-4">
+            <div>
+              <p className="text-sm font-medium text-slate-500">Nome Scuola</p>
+              <p className="mt-1 text-slate-900">{school.name}</p>
+            </div>
+            {school.gymName && (
               <div>
-                <label className="block text-sm font-medium text-gray-700">Nome Scuola</label>
-                <p className="mt-1 text-sm text-gray-900">{school.name}</p>
+                <p className="text-sm font-medium text-slate-500">Palestra</p>
+                <p className="mt-1 text-slate-900">{school.gymName}</p>
               </div>
-              {school.gymName && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Nome Palestra</label>
-                  <p className="mt-1 text-sm text-gray-900">{school.gymName}</p>
-                </div>
-              )}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">URL Registrazione</label>
-                <p className="mt-1 text-sm text-blue-600 font-mono">
-                  {typeof window !== 'undefined' ? `${window.location.origin}/register/${school.slug}` : ''}
-                </p>
-              </div>
+            )}
+            <div>
+              <p className="text-sm font-medium text-slate-500">URL nel QR Code</p>
+              <p className="mt-1 break-all rounded-lg bg-slate-50 px-3 py-2 font-mono text-sm text-indigo-700">
+                {registrationURL}
+              </p>
+              <p className="mt-2 text-xs text-slate-500">
+                Usa sempre questo URL pubblico (non localhost), altrimenti dal telefono non funziona.
+              </p>
             </div>
           </div>
 
-          <div className="border-t pt-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                QR Code
-              </h3>
-              <button
-                onClick={generateQRCode}
-                disabled={qrLoading}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
-              >
-                {qrLoading ? "Generazione..." : "Genera QR Code"}
-              </button>
-            </div>
+          <div className="border-t border-slate-200 pt-6">
+            {error && (
+              <p className="mb-4 text-sm text-red-600">{error}</p>
+            )}
 
-            {qrCodeDataURL && (
+            {qrLoading && (
+              <div className="py-10 text-center text-slate-500">Generazione QR Code...</div>
+            )}
+
+            {qrCodeDataURL && !qrLoading && (
               <div className="text-center">
-                <div className="inline-block p-4 bg-white border-2 border-gray-200 rounded-lg">
-                  <Image 
-                    src={qrCodeDataURL} 
+                <div className="inline-block rounded-xl border-2 border-slate-200 bg-white p-4">
+                  <Image
+                    src={qrCodeDataURL}
                     alt={`QR Code per ${school.name}`}
                     width={256}
                     height={256}
-                    className="w-64 h-64"
+                    className="h-64 w-64"
+                    unoptimized
                   />
                 </div>
-                <div className="mt-4 space-x-3">
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-center">
                   <button
+                    type="button"
                     onClick={downloadQRCode}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                    className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700"
                   >
                     Scarica PNG
                   </button>
                   <button
-                    onClick={() => navigator.clipboard.writeText(`${window.location.origin}/register/${school.slug}`)}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                    type="button"
+                    onClick={() => navigator.clipboard.writeText(registrationURL)}
+                    className="rounded-xl bg-slate-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
                   >
                     Copia URL
                   </button>
+                  <a
+                    href={registrationURL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700"
+                  >
+                    Apri form
+                  </a>
                 </div>
-              </div>
-            )}
-
-            {!qrCodeDataURL && (
-              <div className="text-center py-8 text-gray-500">
-                <p>Fai clic su &quot;Genera QR Code&quot; per creare il codice QR</p>
               </div>
             )}
           </div>
 
-          <div className="border-t pt-6 mt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">
-              Istruzioni per l&apos;uso
-            </h3>
-            <div className="text-sm text-gray-600 space-y-2">
-              <p>• <strong>Stampa il QR Code</strong> e posizionalo in un luogo visibile nella palestra</p>
-              <p>• I nuovi iscritti potranno <strong>scannerizzare il codice</strong> con il loro smartphone</p>
-              <p>• Verranno <strong>reindirizzati automaticamente</strong> alla pagina di registrazione</p>
-              <p>• Potranno <strong>compilare il form</strong> e registrarsi alla scuola</p>
+          <div className="mt-6 border-t border-slate-200 pt-6">
+            <h3 className="mb-3 text-lg font-semibold text-slate-900">Istruzioni</h3>
+            <div className="space-y-2 text-sm text-slate-600">
+              <p>• Stampa il QR Code e mettilo in palestra</p>
+              <p>• Gli iscritti lo scansionano con lo smartphone</p>
+              <p>• Si apre il form di registrazione per questa scuola</p>
+              <p>• Se cambi lo slug della scuola, rigenera e ristampa il QR</p>
             </div>
           </div>
         </div>
@@ -206,4 +212,3 @@ export default function SchoolQRPage() {
     </div>
   )
 }
-

@@ -37,8 +37,14 @@ yarn-error.log*
 # vercel
 .vercel
 
+# prisma compute local link
+.prisma/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# migration exports
+/scripts/supabase-export.json
 
 /src/generated/prisma

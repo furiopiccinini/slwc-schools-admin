@@ -25,9 +25,10 @@ export async function GET(
     return NextResponse.json(school)
   } catch (error) {
     console.error("Errore nel recupero scuola pubblica:", error)
+    const message = error instanceof Error ? error.message : "Errore interno del server"
     return NextResponse.json(
-      { error: "Errore interno del server" },
-      { status: 500 }
+      { error: "Errore di connessione al database", details: message },
+      { status: 503 }
     )
   }
 }

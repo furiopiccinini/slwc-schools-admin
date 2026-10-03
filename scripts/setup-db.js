@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Database setup script for Supabase
- * Run this after deploying to Vercel to set up your database
+ * Database setup script for Prisma Postgres
+ * Verify DATABASE_URL connectivity against Prisma Postgres.
  */
 
 const { PrismaClient } = require('@prisma/client');
@@ -10,19 +10,22 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🚀 Setting up database...');
-  
+  console.log('Setting up database...');
+
   try {
-    // Test database connection
     await prisma.$connect();
-    console.log('✅ Database connection successful');
-    
-    // You can add any initial data setup here
-    // For example, create a default admin user or school
-    
-    console.log('✅ Database setup completed');
+    console.log('Database connection successful');
+
+    const schoolCount = await prisma.school.count();
+    const instructorCount = await prisma.instructor.count();
+    const subscriberCount = await prisma.subscriber.count();
+
+    console.log(`Schools: ${schoolCount}`);
+    console.log(`Instructors: ${instructorCount}`);
+    console.log(`Subscribers: ${subscriberCount}`);
+    console.log('Database setup completed');
   } catch (error) {
-    console.error('❌ Database setup failed:', error);
+    console.error('Database setup failed:', error);
     process.exit(1);
   } finally {
     await prisma.$disconnect();
@@ -30,6 +33,3 @@ async function main() {
 }
 
 main();
-
-
-

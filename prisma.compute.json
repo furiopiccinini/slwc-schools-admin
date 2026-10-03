@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schemas.prisma.io/compute.schema.json",
+  "app": {
+    "name": "SLWC School Management",
+    "region": "eu-central-1",
+    "framework": "nextjs",
+    "httpPort": 3000,
+    "build": {
+      "command": "npm run build",
+      "outputDirectory": ".next/standalone"
+    }
+  }
+}

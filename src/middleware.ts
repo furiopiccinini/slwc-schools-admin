@@ -19,8 +19,8 @@ export default withAuth(
           return token?.role === "INSTRUCTOR" || token?.role === "ADMIN"
         }
         
-        // Public routes
-        if (pathname.startsWith("/register") || pathname.startsWith("/auth")) {
+        // Public auth routes (register is excluded from matcher)
+        if (pathname.startsWith("/auth")) {
           return true
         }
         
@@ -31,5 +31,10 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ["/admin/:path*", "/instructor/:path*", "/register/:path*"]
+  matcher: [
+    "/admin",
+    "/admin/:path*",
+    "/instructor",
+    "/instructor/:path*",
+  ],
 }
