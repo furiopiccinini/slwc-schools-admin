@@ -59,18 +59,15 @@ export async function POST(request: NextRequest) {
     const randomString = Math.random().toString(36).substring(2, 15)
     const key = `medical-certificates/${timestamp}-${randomString}-${fileName}`
 
-    // Crea il comando per l'upload
+    // Solo Bucket/Key/ContentType: i Metadata andrebbero firmati e il browser
+    // non li invia nel PUT, causando 403 SignatureDoesNotMatch su S3.
+    const contentType = fileType || "application/octet-stream"
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET!,
       Key: key,
-      ContentType: fileType,
-      Metadata: {
-        uploadedAt: new Date().toISOString(),
-        purpose: 'medical-certificate'
-      }
+      ContentType: contentType,
     })
 
-    // Genera URL presigned per l'upload
     console.log('Generating presigned URL for key:', key)
     const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
     console.log('Presigned URL generated successfully')
@@ -78,6 +75,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       signedUrl,
       key,
+      contentType,
       bucket: process.env.AWS_S3_BUCKET
     })
 

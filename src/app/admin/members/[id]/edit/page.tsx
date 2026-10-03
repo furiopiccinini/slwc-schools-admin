@@ -205,20 +205,20 @@ export default function EditSubscriberPage() {
         },
         body: JSON.stringify({
           fileName: file.name,
-          fileType: file.type
+          fileType: file.type || 'application/octet-stream'
         })
       })
 
       if (uploadResponse.ok) {
         const responseData = await uploadResponse.json()
-        const { signedUrl, key } = responseData
+        const { signedUrl, key, contentType } = responseData
 
-        // Carica il file su S3
+        // Carica il file su S3 (Content-Type deve coincidere con quello firmato)
         const uploadToS3Response = await fetch(signedUrl, {
           method: 'PUT',
           body: file,
           headers: {
-            'Content-Type': file.type,
+            'Content-Type': contentType || file.type || 'application/octet-stream',
           }
         })
 

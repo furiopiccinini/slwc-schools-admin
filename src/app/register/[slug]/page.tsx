@@ -104,26 +104,26 @@ export default function PublicRegistrationPage() {
             },
             body: JSON.stringify({
               fileName: medicalCertFile.name,
-              fileType: medicalCertFile.type
+              fileType: medicalCertFile.type || 'application/octet-stream'
             })
           })
 
           if (uploadResponse.ok) {
-            const { signedUrl, key } = await uploadResponse.json()
+            const { signedUrl, key, contentType } = await uploadResponse.json()
             
-            // Carica il file su S3
+            // Carica il file su S3 (Content-Type deve coincidere con quello firmato)
             const uploadToS3Response = await fetch(signedUrl, {
               method: 'PUT',
               body: medicalCertFile,
               headers: {
-                'Content-Type': medicalCertFile.type,
+                'Content-Type': contentType || medicalCertFile.type || 'application/octet-stream',
               }
             })
 
             if (uploadToS3Response.ok) {
               medicalCertS3Key = key
             } else {
-              console.error('Errore upload su S3')
+              console.error('Errore upload su S3', await uploadToS3Response.text())
             }
           }
         } catch (uploadError) {
