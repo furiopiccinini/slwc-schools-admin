@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -83,10 +83,13 @@ export default function EditSubscriberPage() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors }
   } = useForm<EditSubscriberForm>({
     resolver: zodResolver(editSubscriberSchema)
   })
+  const schoolIdValue = watch("schoolId")
+  const schoolEdited = useRef(false)
 
 
   const fetchSubscriber = useCallback(async () => {
@@ -136,7 +139,7 @@ export default function EditSubscriberPage() {
         setValue("isEpsMember", data.isEpsMember)
         setValue("epsCardNumber", data.epsCardNumber || "")
         setValue("epsJoinDate", data.epsJoinDate ? data.epsJoinDate.split('T')[0] : "")
-        setValue("schoolId", data.schoolId.toString())
+        setValue("schoolId", data.schoolId == null ? "" : String(data.schoolId))
       } else {
         alert("Iscritto non trovato")
         router.push("/admin/members")
@@ -167,6 +170,11 @@ export default function EditSubscriberPage() {
       fetchSchools()
     }
   }, [subscriberId, fetchSubscriber, fetchSchools])
+
+  useEffect(() => {
+    if (schoolEdited.current || !subscriber || schools.length === 0) return
+    setValue("schoolId", subscriber.schoolId == null ? "" : String(subscriber.schoolId))
+  }, [subscriber, schools, setValue])
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -520,7 +528,15 @@ export default function EditSubscriberPage() {
                       Scuola *
                     </label>
                     <select
-                      {...register("schoolId")}
+                      id="schoolId"
+                      value={schoolIdValue ?? ""}
+                      onChange={(event) => {
+                        schoolEdited.current = true
+                        setValue("schoolId", event.target.value, {
+                          shouldDirty: true,
+                          shouldValidate: true,
+                        })
+                      }}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value="">Seleziona scuola</option>

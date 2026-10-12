@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -81,10 +81,13 @@ export default function EditSubscriberPage() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors }
   } = useForm<EditSubscriberForm>({
     resolver: zodResolver(editSubscriberSchema)
   })
+  const schoolIdValue = watch("schoolId")
+  const schoolEdited = useRef(false)
 
   const fetchSubscriber = useCallback(async () => {
     try {
@@ -132,7 +135,7 @@ export default function EditSubscriberPage() {
         setValue("isEpsMember", data.isEpsMember)
         setValue("epsCardNumber", data.epsCardNumber || "")
         setValue("epsJoinDate", data.epsJoinDate ? data.epsJoinDate.split('T')[0] : "")
-        setValue("schoolId", data.schoolId.toString())
+        setValue("schoolId", data.schoolId == null ? "" : String(data.schoolId))
       } else {
         alert("Iscritto non trovato")
         router.push("/instructor/members")
@@ -161,6 +164,11 @@ export default function EditSubscriberPage() {
     fetchSubscriber()
     fetchSchools()
   }, [fetchSubscriber, fetchSchools])
+
+  useEffect(() => {
+    if (schoolEdited.current || !subscriber || schools.length === 0) return
+    setValue("schoolId", subscriber.schoolId == null ? "" : String(subscriber.schoolId))
+  }, [subscriber, schools, setValue])
 
   const onSubmit = async (data: EditSubscriberForm) => {
     setSubmitting(true)
@@ -465,10 +473,17 @@ export default function EditSubscriberPage() {
 
             <div className="col-span-6 sm:col-span-3">
               <Select
-                {...register("schoolId")}
                 label="Scuola"
                 error={errors.schoolId?.message}
-                options={schoolOptions}
+                options={[{ value: "", label: "Seleziona scuola" }, ...schoolOptions]}
+                value={schoolIdValue ?? ""}
+                onChange={(event) => {
+                  schoolEdited.current = true
+                  setValue("schoolId", event.target.value, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }}
                 required
               />
             </div>

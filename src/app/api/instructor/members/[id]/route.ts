@@ -100,6 +100,11 @@ export async function PUT(
       return NextResponse.json({ error: "Iscritto non trovato" }, { status: 404 })
     }
 
+    const parsedSchoolId = Number(body.schoolId)
+    if (!Number.isInteger(parsedSchoolId)) {
+      return NextResponse.json({ error: "Seleziona una scuola" }, { status: 400 })
+    }
+
     // Aggiorna l'iscritto
     const updatedSubscriber = await prisma.subscriber.update({
       where: { id: subscriberId },
@@ -123,7 +128,7 @@ export async function PUT(
         isEpsMember: body.isEpsMember,
         epsCardNumber: body.epsCardNumber,
         epsJoinDate: body.epsJoinDate ? new Date(body.epsJoinDate) : null,
-        schoolId: body.schoolId
+        schoolId: parsedSchoolId
       }
     })
 

@@ -91,9 +91,17 @@ export async function PUT(
       schoolId
     } = body
 
+    const parsedSchoolId = Number(schoolId)
+    if (!Number.isInteger(parsedSchoolId)) {
+      return NextResponse.json(
+        { error: "Seleziona una scuola" },
+        { status: 400 }
+      )
+    }
+
     // Verifica che la scuola esista
     const school = await prisma.school.findUnique({
-      where: { id: schoolId }
+      where: { id: parsedSchoolId }
     })
 
     if (!school) {
@@ -128,7 +136,7 @@ export async function PUT(
         isEpsMember: isEpsMember || false,
         epsCardNumber: epsCardNumber || null,
         epsJoinDate: epsJoinDate ? new Date(epsJoinDate) : null,
-        schoolId: parseInt(schoolId)
+        schoolId: parsedSchoolId
       },
       include: {
         school: {

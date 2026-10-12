@@ -115,19 +115,25 @@ export default function SubscribersPage() {
     setExporting(true)
     try {
       const response = await fetch('/api/admin/export-subscribers')
-      if (response.ok) {
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `iscritti-slwc-${new Date().toISOString().split('T')[0]}.xlsx`
-        document.body.appendChild(a)
-        a.click()
-        window.URL.revokeObjectURL(url)
-        document.body.removeChild(a)
-      } else {
-        alert('Errore durante l\'esportazione')
+      const contentType = response.headers.get('content-type') || ''
+      if (!response.ok || contentType.includes('application/json')) {
+        const data = await response.json().catch(() => null)
+        alert(data?.error || 'Errore durante l\'esportazione')
+        return
       }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const disposition = response.headers.get('content-disposition') || ''
+      const filename = disposition.match(/filename="([^"]+)"/)?.[1]
+        || `caricamentoTessere-${new Date().getFullYear()}.xls`
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
     } catch (error) {
       console.error('Errore esportazione:', error)
       alert('Errore durante l\'esportazione')
@@ -202,13 +208,14 @@ export default function SubscribersPage() {
                    disabled={exporting || subscribers.length === 0}
                    variant="primary"
                    loading={exporting}
+                   title="Esporta nel modello Libertas gli iscritti con pagamento annuale effettuato e senza data di iscrizione EPS"
                    leftIcon={
                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                      </svg>
                    }
                  >
-                   {exporting ? 'Esportando...' : 'Esporta Excel'}
+                   {exporting ? 'Esportando...' : 'Esporta tessere'}
                  </Button>
                  <Link href="/admin/members/new">
                    <Button
