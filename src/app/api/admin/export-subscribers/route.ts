@@ -14,17 +14,15 @@ export async function GET(_request: NextRequest) {
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 })
     }
 
-    const pending = await prisma.subscriber.findMany({
-      where: {
-        annualPayment: true,
-        epsJoinDate: null,
-      },
+    const paid = await prisma.subscriber.findMany({
+      where: { annualPayment: true },
       orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
     })
+    const pending = paid.filter((subscriber) => !subscriber.epsCardNumber?.trim())
 
     if (pending.length === 0) {
       return NextResponse.json(
-        { error: "Nessun iscritto con pagamento annuale effettuato e senza data di iscrizione EPS da esportare." },
+        { error: "Nessun iscritto con pagamento annuale effettuato e senza numero tessera EPS da esportare." },
         { status: 404 }
       )
     }

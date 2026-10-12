@@ -29,7 +29,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             className={cn(
-              "block w-full rounded-lg border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 transition-colors duration-200",
+              "block w-full rounded-lg border-0 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gold transition-colors duration-200",
               leftIcon ? "pl-10" : "pl-3",
               rightIcon ? "pr-10" : "pr-3",
               error && "ring-red-300 focus:ring-red-600",
@@ -80,7 +80,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           ref={ref}
           className={cn(
-            "block w-full rounded-lg border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 transition-colors duration-200 resize-none",
+            "block w-full rounded-lg border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gold transition-colors duration-200 resize-none",
             error && "ring-red-300 focus:ring-red-600",
             className
           )}
@@ -125,7 +125,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <select
             ref={ref}
             className={cn(
-              "block w-full rounded-lg border-0 py-2.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 transition-colors duration-200 appearance-none bg-white",
+              "block w-full rounded-lg border-0 py-2.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gold transition-colors duration-200 appearance-none bg-white",
               error && "ring-red-300 focus:ring-red-600",
               className
             )}
@@ -177,7 +177,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               ref={ref}
               type="checkbox"
               className={cn(
-                "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors duration-200",
+                "h-4 w-4 rounded border-gray-300 text-gold focus:ring-gold transition-colors duration-200",
                 error && "border-red-300 text-red-600 focus:ring-red-500",
                 className
               )}
@@ -224,8 +224,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseClasses = "inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
     
     const variants = {
-      primary: "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500 shadow-sm",
-      secondary: "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500 shadow-sm",
+      primary: "bg-gold text-ink hover:bg-gold-dark focus:ring-gold shadow-sm",
+      secondary: "bg-white text-charcoal border border-charcoal/15 hover:bg-paper focus:ring-gold shadow-sm",
       success: "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500 shadow-sm",
       danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm",
       warning: "bg-yellow-600 text-white hover:bg-yellow-700 focus:ring-yellow-500 shadow-sm",
@@ -233,9 +233,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
     
     const sizes = {
-      sm: "px-2 py-1 text-xs",
-      md: "px-3 py-1.5 text-sm",
-      lg: "px-4 py-2 text-base"
+      sm: "min-h-10 px-3 py-2 text-sm",
+      md: "min-h-11 px-4 py-2.5 text-sm",
+      lg: "min-h-12 px-5 py-3 text-base"
     }
 
     return (

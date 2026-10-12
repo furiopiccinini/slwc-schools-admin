@@ -31,141 +31,60 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      <div className="flex h-64 items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold" />
       </div>
     )
   }
 
+  const cards = stats
+    ? [
+        { label: "Scuole", value: stats.totalSchools },
+        { label: "Istruttori", value: stats.totalInstructors },
+        { label: "Iscritti", value: stats.totalSubscribers },
+        { label: "Nuovi iscritti (30 giorni)", value: stats.recentSubscribers },
+      ]
+    : []
+
   return (
-    <div className="px-4 py-6 sm:px-0">
-      <div className="border-4 border-dashed border-gray-200 rounded-lg p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Dashboard Amministratore
-        </h1>
-        
-        {stats && (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center">
-                      <span className="text-white font-bold">S</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
-                        Scuole Totali
-                      </dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {stats.totalSchools}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-ink">Dashboard</h1>
+        <p className="mt-1 text-sm text-slate-brand">Panoramica delle scuole Sam Lau Wing Chun.</p>
+      </div>
 
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
-                      <span className="text-white font-bold">I</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
-                        Istruttori Totali
-                      </dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {stats.totalInstructors}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
+      {stats && (
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {cards.map((card) => (
+            <div key={card.label} className="rounded-xl border-t-4 border-gold bg-white p-4 shadow-sm">
+              <p className="text-sm font-medium text-slate-brand">{card.label}</p>
+              <p className="mt-1 text-3xl font-bold tabular-nums text-ink">{card.value}</p>
             </div>
+          ))}
+        </div>
+      )}
 
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
-                      <span className="text-white font-bold">M</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
-                        Iscritti Totali
-                      </dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {stats.totalSubscribers}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                      <span className="text-white font-bold">N</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
-                        Nuovi Iscritti (30gg)
-                      </dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {stats.recentSubscribers}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Azioni Rapide
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <a
-              href="/admin/schools/new"
-              className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              <div className="text-sm font-medium text-gray-900">
-                Aggiungi Nuova Scuola
-              </div>
-            </a>
-            <a
-              href="/admin/members/promote"
-              className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              <div className="text-sm font-medium text-gray-900">
-                Promuovi Iscritto a Istruttore
-              </div>
-            </a>
-            <a
-              href="/admin/members"
-              className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              <div className="text-sm font-medium text-gray-900">
-                Visualizza Tutti gli Iscritti
-              </div>
-            </a>
-          </div>
+      <div>
+        <h2 className="mb-3 text-lg font-semibold text-ink">Azioni rapide</h2>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <a
+            href="/admin/schools/new"
+            className="flex min-h-16 items-center rounded-xl bg-charcoal px-5 py-4 text-sm font-semibold text-white hover:bg-ink"
+          >
+            Aggiungi una scuola
+          </a>
+          <a
+            href="/admin/members/promote"
+            className="flex min-h-16 items-center rounded-xl bg-gold px-5 py-4 text-sm font-semibold text-ink hover:bg-gold-dark"
+          >
+            Promuovi un iscritto
+          </a>
+          <a
+            href="/admin/members"
+            className="flex min-h-16 items-center rounded-xl bg-white px-5 py-4 text-sm font-semibold text-charcoal shadow-sm ring-1 ring-black/5 hover:bg-indigo-50"
+          >
+            Vedi tutti gli iscritti
+          </a>
         </div>
       </div>
     </div>

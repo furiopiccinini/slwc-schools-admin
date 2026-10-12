@@ -67,121 +67,77 @@ export default function SchoolsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      <div className="flex h-64 items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold" />
       </div>
     )
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">Scuole</h1>
-          <p className="mt-2 text-sm text-gray-700">
+    <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-ink">Scuole</h1>
+          <p className="mt-1 text-sm text-slate-brand">
             Gestisci tutte le scuole dell&apos;associazione
           </p>
         </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <Link
-            href="/admin/schools/new"
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-          >
-            Aggiungi Scuola
-          </Link>
-        </div>
+        <Link
+          href="/admin/schools/new"
+          className="inline-flex min-h-11 items-center justify-center rounded-lg bg-gold px-4 text-sm font-semibold text-ink hover:bg-gold-dark"
+        >
+          Aggiungi scuola
+        </Link>
       </div>
-      
-      <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Nome Scuola
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Nome Palestra
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Slug
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Indirizzo
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Istruttori
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Iscritti
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Data Creazione
-                    </th>
-                    <th className="relative px-6 py-3">
-                      <span className="sr-only">Azioni</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {schools && schools.length > 0 ? schools.map((school) => (
-                    <tr key={school.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {school.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {school.gymName || "Non specificato"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {school.slug}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
-                        {school.address || "Non specificato"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {school._count.instructors}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {school._count.subscribers ?? school._count.members ?? 0}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(school.createdAt).toLocaleDateString("it-IT")}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Link
-                          href={`/admin/schools/${school.id}/edit`}
-                          className="text-indigo-600 hover:text-indigo-900 mr-4"
-                        >
-                          Modifica
-                        </Link>
-                        <Link
-                          href={`/admin/schools/${school.id}/qr`}
-                          className="text-green-600 hover:text-green-900 mr-4"
-                        >
-                          QR Code
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(school.id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          Elimina
-                        </button>
-                      </td>
-                    </tr>
-                  )) : (
-                    <tr>
-                      <td colSpan={8} className="px-6 py-4 text-center text-sm text-gray-500">
-                        Nessuna scuola trovata
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+
+      <div className="mt-6 space-y-4">
+        {schools && schools.length > 0 ? schools.map((school) => (
+          <article key={school.id} className="rounded-xl border-t-4 border-gold bg-white p-4 shadow-sm">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <h2 className="text-base font-semibold text-ink">{school.name}</h2>
+                <p className="mt-1 text-sm text-slate-brand">{school.gymName || "Palestra non indicata"}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href={`/admin/schools/${school.id}/edit`}
+                  className="inline-flex min-h-10 items-center rounded-lg bg-gold px-3 text-sm font-semibold text-ink"
+                >
+                  Modifica
+                </Link>
+                <Link
+                  href={`/admin/schools/${school.id}/qr`}
+                  className="inline-flex min-h-10 items-center rounded-lg bg-charcoal px-3 text-sm font-semibold text-white"
+                >
+                  QR Code
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(school.id)}
+                  className="inline-flex min-h-10 items-center rounded-lg bg-red-600 px-3 text-sm font-semibold text-white"
+                >
+                  Elimina
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
+            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Istruttori</dt>
+                <dd className="mt-0.5 text-ink">{school._count.instructors}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Iscritti</dt>
+                <dd className="mt-0.5 text-ink">{school._count.subscribers ?? school._count.members ?? 0}</dd>
+              </div>
+              <div className="col-span-2">
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Indirizzo</dt>
+                <dd className="mt-0.5 break-words text-ink">{school.address || "Non specificato"}</dd>
+              </div>
+            </dl>
+          </article>
+        )) : (
+          <p className="rounded-xl bg-white px-4 py-8 text-center text-sm text-slate-brand">Nessuna scuola trovata</p>
+        )}
       </div>
     </div>
   )

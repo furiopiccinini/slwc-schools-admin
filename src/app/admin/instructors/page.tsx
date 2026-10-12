@@ -80,13 +80,13 @@ export default function InstructorsPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold" />
       </div>
     )
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
+    <div>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-2xl font-semibold text-gray-900">Istruttori</h1>
@@ -110,82 +110,39 @@ export default function InstructorsPage() {
         </div>
       </div>
       
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Nome
-                    </th>
-                    <th scope="col" className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Email
-                    </th>
-                    <th scope="col" className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Ruolo
-                    </th>
-                    <th scope="col" className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Scuola
-                    </th>
-                    <th scope="col" className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Data Creazione
-                    </th>
-                    <th scope="col" className="relative px-6 py-3">
-                      <span className="sr-only">Azioni</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {instructors.map((instructor) => (
-                    <tr key={instructor.id}>
-                      <td className="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {instructor.name}
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {instructor.email}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          instructor.role === 'ADMIN' 
-                            ? 'bg-purple-100 text-purple-800' 
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {instructor.role === 'ADMIN' ? 'Admin' : 'Istruttore'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {instructor.school.name}
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(instructor.createdAt).toLocaleDateString('it-IT')}
-                      </td>
-                      <td className="px-6 py-2 whitespace-nowrap text-sm font-medium">
-                        <div className="flex flex-col space-y-1 items-start">
-                          <Link href={`/admin/instructors/${instructor.id}/edit`}>
-                            <Button variant="ghost" size="sm">
-                              Modifica
-                            </Button>
-                          </Link>
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={() => handleDeleteClick(instructor)}
-                            disabled={deletingId === instructor.id}
-                            loading={deletingId === instructor.id}
-                          >
-                            {deletingId === instructor.id ? 'Eliminando...' : 'Elimina'}
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      <div className="mt-6 space-y-4">
+        {instructors.map((instructor) => (
+          <article key={instructor.id} className="rounded-xl border-t-4 border-gold bg-white p-4 shadow-sm">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <h2 className="break-words text-base font-semibold text-ink">{instructor.name}</h2>
+                <p className="mt-1 break-all text-sm text-slate-brand">{instructor.email}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Link href={`/admin/instructors/${instructor.id}/edit`}>
+                  <Button variant="primary" size="sm">Modifica</Button>
+                </Link>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeleteClick(instructor)}
+                  disabled={deletingId === instructor.id}
+                  loading={deletingId === instructor.id}
+                >
+                  {deletingId === instructor.id ? "Eliminando..." : "Elimina"}
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+              <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
+                instructor.role === "ADMIN" ? "bg-gold text-ink" : "bg-charcoal text-white"
+              }`}>
+                {instructor.role === "ADMIN" ? "Admin" : "Istruttore"}
+              </span>
+              <span className="text-slate-brand">{instructor.school.name}</span>
+            </div>
+          </article>
+        ))}
       </div>
       
       {instructors.length === 0 && (
@@ -197,7 +154,7 @@ export default function InstructorsPage() {
       {/* Modal di conferma eliminazione */}
       {showDeleteModal && instructorToDelete && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative mx-auto mt-16 w-[min(24rem,calc(100%-2rem))] rounded-xl bg-white p-5 shadow-lg">
             <div className="mt-3 text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                 <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

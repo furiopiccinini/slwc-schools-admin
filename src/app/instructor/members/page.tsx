@@ -88,13 +88,13 @@ export default function InstructorMembersPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold" />
       </div>
     )
   }
 
   return (
-    <div className="px-4 sm:px-0">
+    <div>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-2xl font-semibold text-gray-900">Iscritti</h1>
@@ -104,157 +104,84 @@ export default function InstructorMembersPage() {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Nome
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Data Iscrizione
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Data Nascita
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Luogo Nascita
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Codice Fiscale
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Residenza
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Email
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Telefono
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Duan
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Documento
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Certificato Medico
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Pagamento Annuale
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Membro EPS
-                    </th>
-                    <th className="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Azioni
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {currentSubscribers.map((subscriber) => (
-                    <tr key={subscriber.id}>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {subscriber.firstName} {subscriber.lastName}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {formatDate(subscriber.slwcJoinDate)}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {formatDate(subscriber.birthDate)}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.birthPlace} ({subscriber.birthCap})
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
-                        {subscriber.fiscalCode}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.residence}<br />
-                        <span className="text-xs text-gray-400">
-                          {subscriber.residenceCity} ({subscriber.residenceCap})
-                        </span>
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.email}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.phone}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          {getDuanLabel(subscriber.duan)}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.documentType ? (
-                          <div>
-                            <div className="font-medium">{getDocumentTypeLabel(subscriber.documentType)}</div>
-                            {subscriber.documentNumber && (
-                              <div className="text-xs text-gray-400">{subscriber.documentNumber}</div>
-                            )}
-                            {subscriber.documentExpiry && (
-                              <div className="text-xs text-gray-400">
-                                Scadenza: {formatDate(subscriber.documentExpiry)}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 text-xs">Non specificato</span>
-                        )}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.hasMedicalCert ? (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Presente
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                            Mancante
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.annualPayment ? (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Pagato
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                            In sospeso
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
-                        {subscriber.isEpsMember ? (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Sì
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                            No
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">
-                        <Link
-                          href={`/instructor/members/${subscriber.id}/edit`}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Modifica
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      <div className="mt-6 space-y-4">
+        {currentSubscribers.map((subscriber) => (
+          <article key={subscriber.id} className="overflow-hidden rounded-xl border-t-4 border-gold bg-white p-4 shadow-sm">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <h2 className="text-base font-semibold text-ink">
+                  {subscriber.firstName} {subscriber.lastName}
+                </h2>
+                <p className="mt-1 text-sm text-slate-brand">{getDuanLabel(subscriber.duan)}</p>
+              </div>
+              <Link
+                href={`/instructor/members/${subscriber.id}/edit`}
+                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-gold px-4 text-sm font-semibold text-ink hover:bg-gold-dark"
+              >
+                Modifica
+              </Link>
             </div>
-          </div>
-        </div>
+            <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Iscrizione</dt>
+                <dd className="mt-0.5 text-ink">{formatDate(subscriber.slwcJoinDate)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Nascita</dt>
+                <dd className="mt-0.5 break-words text-ink">
+                  {formatDate(subscriber.birthDate)} · {subscriber.birthPlace} ({subscriber.birthCap})
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Codice fiscale</dt>
+                <dd className="mt-0.5 break-all font-mono text-ink">{subscriber.fiscalCode}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Residenza</dt>
+                <dd className="mt-0.5 break-words text-ink">
+                  {subscriber.residence}
+                  <span className="block text-xs text-gray-500">
+                    {subscriber.residenceCity} ({subscriber.residenceCap})
+                  </span>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Contatti</dt>
+                <dd className="mt-0.5 break-words text-ink">
+                  {subscriber.email}
+                  <span className="block">{subscriber.phone}</span>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">Documento</dt>
+                <dd className="mt-0.5 break-words text-ink">
+                  {subscriber.documentType ? (
+                    <>
+                      {getDocumentTypeLabel(subscriber.documentType)}
+                      {subscriber.documentNumber && <span className="block text-xs text-gray-500">{subscriber.documentNumber}</span>}
+                      {subscriber.documentExpiry && (
+                        <span className="block text-xs text-gray-500">Scadenza: {formatDate(subscriber.documentExpiry)}</span>
+                      )}
+                    </>
+                  ) : (
+                    "Non specificato"
+                  )}
+                </dd>
+              </div>
+            </dl>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${subscriber.hasMedicalCert ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                {subscriber.hasMedicalCert ? "Certificato presente" : "Certificato mancante"}
+              </span>
+              <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${subscriber.annualPayment ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
+                {subscriber.annualPayment ? "Pagamento effettuato" : "Pagamento in sospeso"}
+              </span>
+              <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${subscriber.isEpsMember ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}>
+                {subscriber.isEpsMember ? "Membro EPS" : "Non membro EPS"}
+              </span>
+            </div>
+          </article>
+        ))}
       </div>
 
       {/* Paginazione */}

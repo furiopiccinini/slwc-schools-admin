@@ -70,7 +70,7 @@ export default function InstructorPage() {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-indigo-600" />
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold" />
       </div>
     )
   }
@@ -78,8 +78,8 @@ export default function InstructorPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-          Dashboard Istruttore
+        <h1 className="text-2xl font-bold tracking-tight text-ink">
+          Dashboard
         </h1>
         <p className="mt-1 text-sm text-slate-500">
           {school?.name
@@ -88,16 +88,16 @@ export default function InstructorPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Link
           href="/instructor/members"
-          className="rounded-xl border border-dashed border-slate-300 bg-white px-5 py-6 text-center text-sm font-semibold text-slate-800 transition hover:border-indigo-400 hover:bg-indigo-50"
+          className="flex min-h-16 items-center justify-center rounded-xl bg-charcoal px-5 py-4 text-center text-sm font-semibold text-white hover:bg-ink"
         >
           Gestisci iscritti
         </Link>
         <Link
           href="/instructor/payments"
-          className="rounded-xl border border-dashed border-slate-300 bg-white px-5 py-6 text-center text-sm font-semibold text-slate-800 transition hover:border-indigo-400 hover:bg-indigo-50"
+          className="flex min-h-16 items-center justify-center rounded-xl bg-gold px-5 py-4 text-center text-sm font-semibold text-ink hover:bg-gold-dark"
         >
           Pagamenti mensili
         </Link>
@@ -106,17 +106,17 @@ export default function InstructorPage() {
       {school?.paymentsEnabled ? (
         <>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="rounded-xl border-t-4 border-gold bg-white p-5 shadow-sm">
               <p className="text-sm font-medium text-slate-500">Incasso mese corrente</p>
               <p className="mt-1 text-3xl font-bold tabular-nums text-slate-900">
                 €{currentTotal.toFixed(2)}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="rounded-xl border-t-4 border-gold bg-white p-5 shadow-sm">
               <p className="text-sm font-medium text-slate-500">Paganti questo mese</p>
               <p className="mt-1 text-3xl font-bold tabular-nums text-slate-900">{currentPaid}</p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="rounded-xl border-t-4 border-gold bg-white p-5 shadow-sm">
               <p className="text-sm font-medium text-slate-500">In roster</p>
               <p className="mt-1 text-3xl font-bold tabular-nums text-slate-900">{currentRoster}</p>
             </div>

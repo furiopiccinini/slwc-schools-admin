@@ -33,7 +33,7 @@ export function PaymentStatsChart({ months }: { months: MonthStat[] }) {
                   {m.totalCollected > 0 ? `€${Math.round(m.totalCollected)}` : ""}
                 </span>
                 <div
-                  className="w-full rounded-t bg-indigo-500 transition-all"
+                  className="w-full rounded-t bg-gold transition-all"
                   style={{ height: `${height}%` }}
                   title={`${m.label}: €${m.totalCollected.toFixed(2)} (${m.paidCount} paganti)`}
                 />

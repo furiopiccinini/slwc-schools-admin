@@ -164,15 +164,15 @@ export default function PublicRegistrationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      <div className="flex min-h-screen items-center justify-center bg-charcoal">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold" />
       </div>
     )
   }
 
   if (!school) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-paper px-4">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Scuola non trovata</h1>
           <p className="text-gray-600">Il QR Code potrebbe essere scaduto o non valido.</p>
@@ -183,8 +183,8 @@ export default function PublicRegistrationPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
+      <div className="flex min-h-screen items-center justify-center bg-paper px-4">
+        <div className="w-full max-w-md rounded-2xl border-t-4 border-gold bg-white p-6 text-center shadow-lg">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
             <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -203,29 +203,22 @@ export default function PublicRegistrationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Image
-                src="/logo-slwc.png"
-                alt="SLWC Logo"
-                width={40}
-                height={40}
-                className="mr-3 rounded-full"
-                style={{
-                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
-                }}
-              />
-              <h1 className="text-xl font-bold text-gray-900">
-                Registrazione SLWC Ufficiale
-              </h1>
-            </div>
+    <div className="min-h-screen bg-paper">
+      <header className="bg-charcoal text-white">
+        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4">
+          <Image
+            src="/logo-slwc.png"
+            alt="Sam Lau Wing Chun"
+            width={40}
+            height={40}
+            className="h-10 w-10 shrink-0 rounded-full"
+          />
+          <div className="min-w-0">
+            <p className="text-xs font-medium uppercase tracking-wide text-gold">Sam Lau Wing Chun</p>
+            <h1 className="truncate text-lg font-semibold">Iscrizione</h1>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
       <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -546,7 +539,7 @@ export default function PublicRegistrationPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                  className="flex min-h-12 w-full items-center justify-center rounded-lg bg-gold text-base font-semibold text-ink shadow-sm hover:bg-gold-dark focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 disabled:opacity-50"
                 >
                   {submitting ? "Registrazione..." : "Registrati alla Scuola"}
                 </button>
