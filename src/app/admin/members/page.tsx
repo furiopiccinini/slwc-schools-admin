@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/FormElements"
+import { matchesMemberQuery } from "@/lib/member-search"
 
 interface Subscriber {
   id: number
@@ -40,6 +41,7 @@ export default function SubscribersPage() {
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [query, setQuery] = useState("")
   const [exporting, setExporting] = useState(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -179,11 +181,40 @@ export default function SubscribersPage() {
     setSubscriberToDelete(null)
   }
 
-  // Calcoli per la paginazione
-  const totalPages = Math.ceil(subscribers.length / itemsPerPage)
+  const filteredSubscribers = subscribers.filter((subscriber) => matchesMemberQuery(subscriber, query))
+  const totalPages = Math.ceil(filteredSubscribers.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const currentSubscribers = subscribers.slice(startIndex, endIndex)
+  const currentSubscribers = filteredSubscribers.slice(startIndex, endIndex)
+
+  const changePage = (page: number) => {
+    setCurrentPage(page)
+    document.getElementById("elenco-iscritti")?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
+  const renderPageButtons = () => totalPages > 1 ? (
+    <div className="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        onClick={() => changePage(Math.max(1, currentPage - 1))}
+        disabled={currentPage === 1}
+        className="min-h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm font-medium text-charcoal hover:bg-paper disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Precedente
+      </button>
+      <span className="text-sm text-slate-brand">
+        Pagina {currentPage} di {totalPages}
+      </span>
+      <button
+        type="button"
+        onClick={() => changePage(Math.min(totalPages, currentPage + 1))}
+        disabled={currentPage === totalPages}
+        className="min-h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm font-medium text-charcoal hover:bg-paper disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Successiva
+      </button>
+    </div>
+  ) : null
 
   if (loading) {
     return (
@@ -199,7 +230,9 @@ export default function SubscribersPage() {
         <div>
           <h1 className="text-2xl font-semibold text-ink">Iscritti</h1>
           <p className="mt-1 text-sm text-slate-brand">
-            Gestisci tutti gli iscritti alle scuole di Wing Chun ({subscribers.length} totali)
+            {query.trim()
+              ? `${filteredSubscribers.length} risultati su ${subscribers.length} iscritti`
+              : `${subscribers.length} iscritti`}
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -208,14 +241,14 @@ export default function SubscribersPage() {
                    disabled={exporting || subscribers.length === 0}
                    variant="primary"
                    loading={exporting}
-                   title="Esporta nel modello Libertas gli iscritti con pagamento annuale effettuato e senza numero tessera EPS"
+                   title="Crea il file Libertas per chi ha pagato l'anno e non ha ancora il numero tessera EPS"
                    leftIcon={
                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                      </svg>
                    }
                  >
-                   {exporting ? 'Esportando...' : 'Esporta tessere'}
+                   {exporting ? 'Esportando...' : 'Esporta non tesserati'}
                  </Button>
                  <Link href="/admin/members/new">
                    <Button
@@ -231,6 +264,20 @@ export default function SubscribersPage() {
                  </Link>
         </div>
       </div>
+
+      <label className="mt-5 block">
+        <span className="sr-only">Cerca iscritti</span>
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value)
+            setCurrentPage(1)
+          }}
+          placeholder="Cerca per nome, email, telefono o codice fiscale"
+          className="block min-h-12 w-full rounded-xl border border-gray-300 bg-white px-4 text-base text-ink placeholder:text-gray-400 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/40"
+        />
+      </label>
 
       {/* Controlli paginazione */}
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -253,30 +300,17 @@ export default function SubscribersPage() {
           <span className="text-sm text-gray-700">iscritti per pagina</span>
         </div>
         
-        {totalPages > 1 && (
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Precedente
-            </button>
-            <span className="text-sm text-gray-700">
-              Pagina {currentPage} di {totalPages}
-            </span>
-            <button
-              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Successiva
-            </button>
-          </div>
-        )}
+        {renderPageButtons()}
       </div>
       
-      <div className="mt-6 space-y-4">
+      <div id="elenco-iscritti" className="mt-6 scroll-mt-20 space-y-4">
+        {filteredSubscribers.length === 0 && (
+          <p className="rounded-xl bg-white px-4 py-8 text-center text-sm text-slate-brand">
+            {query.trim()
+              ? "Nessun iscritto corrisponde alla ricerca."
+              : "Nessun iscritto."}
+          </p>
+        )}
         {currentSubscribers.map((subscriber) => (
           <article key={subscriber.id} className="overflow-hidden rounded-xl border-t-4 border-gold bg-white p-4 shadow-sm">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -423,10 +457,12 @@ export default function SubscribersPage() {
         </div>
       )}
 
-      {/* Informazioni paginazione */}
-      {subscribers.length > 0 && (
-        <div className="mt-4 text-center text-sm text-gray-500">
-          Mostrando {startIndex + 1}-{Math.min(endIndex, subscribers.length)} di {subscribers.length} iscritti
+      {filteredSubscribers.length > 0 && (
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-slate-brand">
+            Mostrando {startIndex + 1}-{Math.min(endIndex, filteredSubscribers.length)} di {filteredSubscribers.length} iscritti
+          </p>
+          {renderPageButtons()}
         </div>
       )}
 
